@@ -7,4 +7,6 @@ import com.cg.LeaveManagement.Entity.Manager;
 @Repository
 public interface ManagerRepository extends JpaRepository<Manager,Integer>{
 
+   public Manager findBymanagerUserName(String managerUserName );
+
 }

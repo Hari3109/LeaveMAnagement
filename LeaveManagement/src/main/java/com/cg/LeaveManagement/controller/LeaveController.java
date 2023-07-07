@@ -22,7 +22,7 @@ public class LeaveController {
             LocalDate start= LocalDate.parse(startDate);
              LocalDate end= LocalDate.parse(endDate);
          return leaveservice.applyLeave(empId, reason, start,end);
-            
+
       }
       @DeleteMapping("/employee/{empId}/Leave/{Leaveid}")
       public void cancelleave(@PathVariable("empId")Integer empId,@PathVariable("Leaveid")Integer Leaveid)throws LeaveManagementSystemException {

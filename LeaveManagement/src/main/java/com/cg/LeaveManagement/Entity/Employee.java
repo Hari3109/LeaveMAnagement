@@ -9,13 +9,15 @@ public class Employee {
 
     @Id
     @GeneratedValue
-    private int empId;
+    private Integer empId;
     private String empName;
+    private String userName;
+    private String password;
     private int leavesAvailable;
-	public int getEmpId() {
+	public Integer getEmpId() {
 		return empId;
 	}
-	public void setEmpId(int empId) {
+	public void setEmpId(Integer empId) {
 		this.empId = empId;
 	}
 	public String getEmpName() {
@@ -38,5 +40,17 @@ public class Employee {
 		// TODO Auto-generated method stub
 		return getLeavesAvailable();
 	}
-	
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getUserName() {
+		return userName;
+	}
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
 }

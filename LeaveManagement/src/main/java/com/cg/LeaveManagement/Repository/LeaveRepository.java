@@ -12,7 +12,7 @@ import com.cg.LeaveManagement.Entity.LeaveStatus;
 @Repository
 public interface LeaveRepository extends JpaRepository<LeaveApplication,Integer> {
 
-	
+
 
 	List<LeaveApplication> findByEmployeeEmpIdAndStatusAndStartDateBetween(int employeeId, LeaveStatus approved,
 			LocalDate startOfMonth, LocalDate endOfMonth);

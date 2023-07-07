@@ -2,6 +2,7 @@ package com.cg.LeaveManagement.Entity;
 
 import java.time.LocalDate;
 
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -10,7 +11,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 @Entity
 public class LeaveApplication {
@@ -19,7 +19,7 @@ public class LeaveApplication {
     @GeneratedValue
     private int Leaveid;
 
-   
+
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -29,8 +29,8 @@ public class LeaveApplication {
 @ManyToOne
 @JoinColumn(name="empId")
 private Employee employee;
-	
-	
+
+
 	public void setEmployee(Employee employee) {
 	this.employee = employee;
 }
@@ -46,7 +46,7 @@ private Employee employee;
 		Leaveid = leaveid;
 	}
 
-	
+
 
 	public LocalDate getStartDate() {
 		return startDate;
@@ -83,7 +83,7 @@ private Employee employee;
 		this.status = status;
 	}
 
-	
+
 	public LeaveApplication(int leaveid, LocalDate startDate, LocalDate endDate, int daysApplied, int daysTaken,
 			Employee employee, LeaveStatus status) {
 		super();
@@ -93,7 +93,7 @@ private Employee employee;
 		this.daysApplied = daysApplied;
 		this.daysTaken = daysTaken;
 		this.employee = employee;
-	
+
 		this.status = status;
 	}
 	public LeaveApplication() {
@@ -115,11 +115,11 @@ private Employee employee;
 		this.employee = employee;
 		this.status = status;
 	}
-	
-	
+
+
 		public boolean isAuthorized() {
-			
+
 			return false;
 		}
-    
+
 }

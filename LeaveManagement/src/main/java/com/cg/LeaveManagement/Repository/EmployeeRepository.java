@@ -7,6 +7,6 @@ import com.cg.LeaveManagement.Entity.Employee;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee,Integer> {
 
-	
+	public Employee findByuserName(String userName);
 
 }

@@ -1,6 +1,7 @@
 package com.cg.LeaveManagement.serviceImpl;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +21,10 @@ public class LeaveServiceImpl implements LeaveService{
 	@Autowired
 	private LeaveRepository leaveRepository;
     @Autowired
-    private EmployeeRepository employeeRepository; 
+    private EmployeeRepository employeeRepository;
 	@Override
 	public LeaveApplication applyLeave(int employeeId, String name, LocalDate startDate, LocalDate endDate) throws LeaveManagementSystemException {
-		
+
 		if (endDate.isBefore(startDate)) {
             throw new LeaveManagementSystemException("End date cannot be before start date");
         }
@@ -31,7 +32,7 @@ public class LeaveServiceImpl implements LeaveService{
         if (daysApplied <= 0) {
             throw new LeaveManagementSystemException("Invalid leave duration");
         }
-       
+
         Employee emp= employeeRepository.findById(employeeId).orElseThrow(()->new LeaveManagementSystemException("Employee not found"));
         int leavesTakenThisMonth = getLeavesThisMonth(employeeId);
         if(leavesTakenThisMonth+daysApplied>2) {
@@ -41,7 +42,7 @@ public class LeaveServiceImpl implements LeaveService{
         if(lastLeave !=null&& lastLeave.getEndDate().isAfter(LocalDate.now().withDayOfMonth(1))) {
         	int UnutilizedLeave= lastLeave.getDaysApplied()-(getDaysBetween(lastLeave.getStartDate(),lastLeave.getEndDate())+1);
         	if(UnutilizedLeave>0) {
-        	 daysApplied=Math.min(daysApplied, UnutilizedLeave);	
+        	 daysApplied=Math.min(daysApplied, UnutilizedLeave);
         	}
         }
         LocalDate leaveEnd=startDate.plusDays(daysApplied-1);
@@ -49,15 +50,15 @@ public class LeaveServiceImpl implements LeaveService{
             throw new LeaveManagementSystemException("Leave cannot be carried forward to next year");
         }
         emp.setEmpId(employeeId);
-        
+
         LeaveApplication leave = new LeaveApplication(startDate, endDate, daysApplied,emp,LeaveStatus.PENDING);
         leaveRepository.save(leave);
         return leave;
-		
+
 	}
 
-	
-	
+
+
 
 	private int getDaysBetween(LocalDate startDate, LocalDate endDate) {
 		int days=0;
@@ -116,5 +117,35 @@ public class LeaveServiceImpl implements LeaveService{
 				}
 		}
    }
+
+
+
+
+	@Override
+	public int calculateLeaveBalance(int empId, int Leaveid) {
+		Optional<LeaveApplication> optleave= leaveRepository.findById(Leaveid);
+		if (optleave.isPresent()) {
+	        throw new IllegalArgumentException("Leave not found for leaveId: " + Leaveid);
+	    }
+	    LeaveApplication leave = optleave.get();
+	    if (leave.getStatus() != LeaveStatus.APPROVED) {
+	        throw new IllegalStateException("Leave has not been approved yet");
+	    }
+	    Optional<Employee> optionalEmployee = employeeRepository.findById(empId);
+	    if (!optionalEmployee.isPresent()) {
+	        throw new IllegalArgumentException("Employee not found for employeeId: " + empId);
+	    }
+	    Employee employee = optionalEmployee.get();
+	    long daysBetween = ChronoUnit.DAYS.between(leave.getStartDate(), leave.getEndDate());
+	    int duration = Math.toIntExact(daysBetween) + 1;
+	    return employee.getLeavesAvailable() - duration;
+
+	}
+
+
+
+
+	
+
 
 }
